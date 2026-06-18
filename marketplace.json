@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "entries": [
+    {
+      "name": "dcc-asset-kenney",
+      "description": "Search and download CC0 Kenney game asset packs",
+      "dcc": ["maya", "blender", "houdini", "3dsmax"],
+      "tags": ["asset", "kenney", "cc0", "game-assets", "download"],
+      "version": "0.1.0",
+      "install": {
+        "type": "git",
+        "url": "https://github.com/dcc-mcp/dcc-asset-kenney",
+        "ref": "main"
+      }
+    }
+  ]
+}
+
