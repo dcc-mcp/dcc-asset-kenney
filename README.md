@@ -18,9 +18,12 @@ but the Kenney logo is reserved for official Kenney projects.
 This skill returns `license_name` and `license_url` for every inspected or
 downloaded asset.
 
+Downloads also return a validated `asset_descriptor` with the downloaded zip,
+Kenney source URL, and CC0 attribution. The zip may need extraction by a DCC
+adapter before scene import.
+
 ## Tools
 
 - `search_kenney_assets`
 - `inspect_kenney_asset`
 - `download_kenney_asset`
-
