@@ -25,6 +25,22 @@ def validate_skill() -> None:
     assert not report.has_errors, report
 
 
+def descriptor_smoke() -> None:
+    result = load("download_kenney_asset").asset_descriptor(
+        {
+            "title": "Factory Kit",
+            "url": "https://kenney.nl/assets/factory-kit",
+            "download_url": "https://kenney.nl/factory-kit.zip",
+            "usage_notice": "Kenney assets are CC0.",
+            "license_name": "CC0 1.0 Universal",
+            "file": "C:/tmp/factory-kit.zip",
+        }
+    )
+    assert result["variants"][0]["local_path"] == "C:/tmp/factory-kit.zip"
+    assert result["attribution"]["source_url"] == "https://kenney.nl/assets/factory-kit"
+    assert result["attribution"]["license_text"] == "Kenney assets are CC0."
+
+
 def live_smoke() -> None:
     if os.environ.get("RUN_LIVE_API_SMOKE") != "true":
         print("skip live Kenney smoke")
@@ -37,6 +53,7 @@ def live_smoke() -> None:
 
 def main() -> None:
     validate_skill()
+    descriptor_smoke()
     live_smoke()
 
 
