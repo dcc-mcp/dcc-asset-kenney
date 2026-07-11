@@ -1,6 +1,6 @@
 # DCC-MCP Kenney Assets
 
-![Workflow showcase](docs/workflow-showcase.png)
+![Workflow showcase](docs/images/dcc-asset-kenney-showcase.webp)
 
 Search, inspect, and download free Kenney asset packs.
 
