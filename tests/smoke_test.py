@@ -14,15 +14,15 @@ SCRIPTS = SKILL / "scripts"
 
 
 def load(name: str):
+    spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
     sys.path.insert(0, str(SCRIPTS))
     try:
-        spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
-        module = importlib.util.module_from_spec(spec)
-        assert spec and spec.loader
         spec.loader.exec_module(module)
-        return module
     finally:
         sys.path.pop(0)
+    return module
 
 
 def validate_skill() -> None:
