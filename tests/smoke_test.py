@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -11,11 +14,15 @@ SCRIPTS = SKILL / "scripts"
 
 
 def load(name: str):
-    spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
-    module = importlib.util.module_from_spec(spec)
-    assert spec and spec.loader
-    spec.loader.exec_module(module)
-    return module
+    sys.path.insert(0, str(SCRIPTS))
+    try:
+        spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
+        module = importlib.util.module_from_spec(spec)
+        assert spec and spec.loader
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        sys.path.pop(0)
 
 
 def validate_skill() -> None:
@@ -41,6 +48,32 @@ def descriptor_smoke() -> None:
     assert result["attribution"]["license_text"] == "Kenney assets are CC0."
 
 
+def entrypoint_smoke() -> None:
+    from dcc_mcp_core._server import run_skill_script
+
+    cases = {
+        "search_kenney_assets": ({"page": "invalid"}, "Failed to search Kenney assets"),
+        "inspect_kenney_asset": ({"asset_url_or_slug": 1}, "Failed to inspect Kenney asset"),
+        "download_kenney_asset": (
+            {"asset_url_or_slug": 1, "output_dir": "."},
+            "Failed to download Kenney asset",
+        ),
+    }
+    for name, (payload, message) in cases.items():
+        script = SCRIPTS / f"{name}.py"
+        assert run_skill_script(str(script), payload)["message"] == message
+
+        completed = subprocess.run(
+            [sys.executable, str(script)],
+            input=json.dumps(payload),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert completed.returncode == 1, completed
+        assert json.loads(completed.stdout)["message"] == message
+
+
 def live_smoke() -> None:
     if os.environ.get("RUN_LIVE_API_SMOKE") != "true":
         print("skip live Kenney smoke")
@@ -53,6 +86,7 @@ def live_smoke() -> None:
 
 def main() -> None:
     validate_skill()
+    entrypoint_smoke()
     descriptor_smoke()
     live_smoke()
 

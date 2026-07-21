@@ -2,7 +2,7 @@
 name: kenney-assets
 description: Search, inspect, and download CC0 Kenney game asset packs as validated AssetDescriptors.
 license: MIT
-compatibility: "dcc-mcp-core 0.19+, Python 3.7+"
+compatibility: "dcc-mcp-core 0.19.49+, Python 3.7+"
 metadata:
   dcc-mcp:
     version: v0.1.0
