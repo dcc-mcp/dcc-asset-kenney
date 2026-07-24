@@ -33,8 +33,8 @@ def search(page: int = 1) -> list[dict[str, Any]]:
     text = get(url)
     items = []
     pattern = re.compile(
-        r"<div class='asset'>.*?<a href='(https://kenney.nl/assets/[^']+)'>.*?<h2><a href='[^']+'>(.*?)</a></h2>.*?</div>",
-        re.S,
+        r"<h2>\s*<a href=['\"](https://kenney\.nl/assets/[^'\"]+)['\"]>(.*?)</a>\s*</h2>",
+        re.IGNORECASE | re.S,
     )
     for match in pattern.finditer(text):
         items.append({"title": html.unescape(match.group(2).strip()), "url": match.group(1), **LICENSE})
