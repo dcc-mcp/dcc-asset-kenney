@@ -48,6 +48,20 @@ def descriptor_smoke() -> None:
     assert result["attribution"]["license_text"] == "Kenney assets are CC0."
 
 
+def search_listing_smoke() -> None:
+    kenney = load("_kenney")
+    kenney.get = lambda _: """
+        <a href='https://kenney.nl/assets/input-prompts'>
+          <div class='cover'></div>
+        </a>
+        <h2><a href='https://kenney.nl/assets/input-prompts'>Input Prompts</a></h2>
+    """
+    assert [
+        (asset["title"], asset["url"])
+        for asset in kenney.search()
+    ] == [("Input Prompts", "https://kenney.nl/assets/input-prompts")]
+
+
 def entrypoint_smoke() -> None:
     from dcc_mcp_core._server import run_skill_script
 
@@ -78,6 +92,9 @@ def live_smoke() -> None:
     if os.environ.get("RUN_LIVE_API_SMOKE") != "true":
         print("skip live Kenney smoke")
         return
+    search_result = load("search_kenney_assets").main(query="input prompts", limit=1)
+    assert search_result["success"], search_result
+    assert search_result["context"]["count"] == 1, search_result
     result = load("inspect_kenney_asset").main(asset_url_or_slug="factory-kit")
     assert result["success"], result
     assert result["context"]["asset"]["license_detected"], result
@@ -88,6 +105,7 @@ def main() -> None:
     validate_skill()
     entrypoint_smoke()
     descriptor_smoke()
+    search_listing_smoke()
     live_smoke()
 
 
