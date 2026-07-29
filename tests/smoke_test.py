@@ -48,6 +48,11 @@ def descriptor_smoke() -> None:
     assert result["attribution"]["license_text"] == "Kenney assets are CC0."
 
 
+def marketplace_smoke() -> None:
+    manifest = json.loads((ROOT / "marketplace.json").read_text(encoding="utf-8"))
+    assert "zbrush" in manifest["entries"][0]["dcc"]
+
+
 def search_listing_smoke() -> None:
     kenney = load("_kenney")
     kenney.get = lambda _: """
@@ -105,6 +110,7 @@ def main() -> None:
     validate_skill()
     entrypoint_smoke()
     descriptor_smoke()
+    marketplace_smoke()
     search_listing_smoke()
     live_smoke()
 
