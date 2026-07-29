@@ -4,7 +4,7 @@
     {
       "name": "dcc-asset-kenney",
       "description": "Search and download CC0 Kenney game asset packs",
-      "dcc": ["maya", "blender", "houdini", "3dsmax"],
+      "dcc": ["maya", "blender", "houdini", "3dsmax", "zbrush"],
       "tags": ["asset", "kenney", "cc0", "game-assets", "download"],
       "version": "0.1.0",
       "install": {
